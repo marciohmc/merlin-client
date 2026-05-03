@@ -26,7 +26,7 @@ export default function App() {
               <Shield className="w-8 h-8 text-blue-500" />
               Merlin Web Console
             </h1>
-            <p className="text-gray-400 mt-2">Acesso Direto via Navegador • Render Free Tier</p>
+            <p className="text-gray-400 mt-2">Acesso Direto via Navegador • Correção de Porta Dinâmica Aplicada</p>
           </div>
           <div className="flex gap-2 text-[10px] items-center">
             <div className="flex items-center gap-1 text-blue-400 border border-blue-500/20 px-2 py-1 bg-blue-500/5 rounded">
