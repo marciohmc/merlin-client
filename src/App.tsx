@@ -1,113 +1,163 @@
-import { Terminal, Shield, Globe, Copy, Check } from "lucide-react";
-import { useState } from "react";
-import { motion } from "motion/react";
+import React, { useState, useEffect, useRef } from 'react';
+import { Shield, Terminal, TerminalSquare, ChevronRight, Globe, AlertCircle, CheckCircle2, Cpu } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+
+const BOOT_LOGS = [
+  "[SYSTEM] Merlin v2.1.4 Initializing...",
+  "[OK] Kernel modules loaded: x86_64",
+  "[OK] Network stack established (0.0.0.0:$PORT)",
+  "[INFO] Compiling Merlin Server from source...",
+  "[INFO] gRPC server preparing on port 50051",
+  "[WARN] Data persistence disabled (RENDER_FREE_TIER)",
+  "[OK] ttyd Web Terminal Bridge READY",
+  "[SYSTEM] AUTH_KEY: ****************",
+  "=========================================",
+  "DIGITE 'HELP' PARA VER OS COMANDOS OU 'START' PARA O CONSOLE",
+];
 
 export default function App() {
-  const [copied, setCopied] = useState<string | null>(null);
+  const [logs, setLogs] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [isBooting, setIsBooting] = useState(true);
+  const terminalEndRef = useRef<HTMLDivElement>(null);
 
-  const copyToClipboard = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(id);
-    setTimeout(() => setCopied(null), 2000);
-  };
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < BOOT_LOGS.length) {
+        setLogs(prev => [...prev, BOOT_LOGS[index]]);
+        index++;
+      } else {
+        clearInterval(interval);
+        setIsBooting(false);
+      }
+    }, 150);
+    return () => clearInterval(interval);
+  }, []);
 
-  const commands = {
-    connect: "./merlin-agent -url https://seu-servidor-c2.onrender.com",
-    envVar: "MERLIN_URL",
+  useEffect(() => {
+    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [logs]);
+
+  const handleCommand = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cmd = inputValue.toLowerCase().trim();
+    if (!cmd) return;
+
+    setLogs(prev => [...prev, `> ${inputValue}`]);
+    setInputValue("");
+
+    setTimeout(() => {
+      switch (cmd) {
+        case 'help':
+          setLogs(prev => [...prev, 
+            "COMANDOS DISPONÍVEIS:",
+            " - start: Abre o console interativo do Merlin",
+            " - status: Verifica o estado do servidor C2",
+            " - clear: Limpa os logs da tela",
+            " - about: Informações sobre o projeto"
+          ]);
+          break;
+        case 'start':
+          setLogs(prev => [...prev, "[!] Redirecionando para o Console Web..."]);
+          window.open("https://merlin-client-w1hb.onrender.com/", "_blank");
+          break;
+        case 'status':
+          setLogs(prev => [...prev, "[OK] Servidor: Ativo", "[OK] Porta: Dinâmica", "[OK] SSL: Habilitado"]);
+          break;
+        case 'clear':
+          setLogs([]);
+          break;
+        case 'about':
+          setLogs(prev => [...prev, "Merlin Web Console v2.1.4", "Powered by Google AI Studio & Render.com"]);
+          break;
+        default:
+          setLogs(prev => [...prev, `[ERR] Comando não reconhecido: ${cmd}`]);
+      }
+    }, 200);
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-gray-200 font-sans p-6 md:p-12">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <header className="mb-12 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-              <Shield className="w-8 h-8 text-blue-500" />
-              Merlin Web Console
-            </h1>
-            <p className="text-gray-400 mt-2">Acesso Direto via Navegador • Correção de Porta Dinâmica Aplicada</p>
+    <div className="min-h-screen bg-[#050505] text-green-500 font-mono p-4 md:p-10 selection:bg-green-500/30 selection:text-green-200">
+      <div className="max-w-4xl mx-auto border border-green-900/30 rounded-lg shadow-2xl shadow-green-500/5 bg-black/50 overflow-hidden flex flex-col h-[80vh]">
+        
+        {/* Header bar */}
+        <div className="bg-[#111] border-b border-green-900/30 p-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Shield className="w-4 h-4 text-green-500" />
+            <span className="text-xs font-bold tracking-widest uppercase opacity-70">Merlin Cloud Terminal</span>
           </div>
-          <div className="flex gap-2 text-[10px] items-center">
-            <div className="flex items-center gap-1 text-blue-400 border border-blue-500/20 px-2 py-1 bg-blue-500/5 rounded">
-              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-ping"></span>
-              WEB TERMINAL ATIVO
-            </div>
+          <div className="flex gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500/20 blur-[1px]"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500/40 blur-[1px]"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500 blur-[2px] animate-pulse"></div>
           </div>
-        </header>
-
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Step 1 */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-[#111111] border border-gray-800 p-5 rounded-xl flex flex-col gap-3"
-          >
-            <div className="w-8 h-8 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-lg font-bold">1</div>
-            <div>
-              <h3 className="font-semibold text-white">Acesso Web</h3>
-              <p className="text-xs text-gray-500 mt-1">Ao abrir o link do seu app no Render, o console do Merlin aparecerá automaticamente.</p>
-            </div>
-          </motion.div>
-
-          {/* Step 2 */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1 }}
-            className="bg-[#111111] border border-gray-800 p-5 rounded-xl flex flex-col gap-3"
-          >
-            <div className="w-8 h-8 bg-purple-500/10 text-purple-500 flex items-center justify-center rounded-lg font-bold">2</div>
-            <div>
-              <h3 className="font-semibold text-white">Sem SSH</h3>
-              <p className="text-xs text-gray-500 mt-1">Não é necessário usar terminal local ou comandos complexos.</p>
-            </div>
-          </motion.div>
-
-          {/* Step 3 */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="bg-[#111111] border border-gray-800 p-5 rounded-xl flex flex-col gap-3"
-          >
-            <div className="w-8 h-8 bg-green-500/10 text-green-500 flex items-center justify-center rounded-lg font-bold">3</div>
-            <div>
-              <h3 className="font-semibold text-white">Persistência</h3>
-              <p className="text-xs text-gray-500 mt-1">Lembre-se: no plano Free, os dados são apagados se o servidor reiniciar.</p>
-            </div>
-          </motion.div>
         </div>
 
-        {/* Console Interactive */}
-        <div className="bg-[#111111] border border-gray-800 rounded-xl overflow-hidden mb-8 shadow-2xl shadow-blue-500/5 text-center p-12">
-          <Shield className="w-16 h-16 text-blue-500/20 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-white mb-2">Web Console Habilitado</h2>
-          <p className="text-sm text-gray-400 mb-6 font-mono">
-            O terminal está sendo transmitido via HTTP (ttyd)
-          </p>
-          <a 
-            href="https://merlin-client-w1hb.onrender.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-          >
-            ABRIR MEU CONSOLE <Globe className="w-4 h-4" />
-          </a>
+        {/* Console Area */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-1 text-sm md:text-base">
+          <AnimatePresence>
+            {logs.map((log, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className={log.startsWith('>') ? "text-blue-400 mt-4 mb-2" : log.startsWith('[ERR]') ? "text-red-500" : ""}
+              >
+                {log}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          <div ref={terminalEndRef} />
         </div>
 
-        {/* Footer Info */}
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between text-[11px] text-gray-500">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1"><Check className="w-3 h-3 text-blue-500" /> Dockerfile Automatizado</span>
-            <span className="flex items-center gap-1"><Check className="w-3 h-3 text-blue-500" /> Web Console (ttyd)</span>
+        {/* Input Area */}
+        {!isBooting && (
+          <form onSubmit={handleCommand} className="bg-[#0a0a0a] border-t border-green-900/30 p-4 flex items-center gap-3">
+            <ChevronRight className="w-5 h-5 text-green-500 animate-pulse" />
+            <input 
+              autoFocus
+              type="text" 
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="bg-transparent border-none outline-none flex-1 text-green-400 placeholder:text-green-900"
+              placeholder="Digite um comando..."
+            />
+          </form>
+        )}
+      </div>
+
+      {/* Stats/Footer */}
+      <div className="max-w-4xl mx-auto mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="border border-green-900/20 rounded p-3 bg-black/40 flex items-center gap-3">
+          <div className="p-2 bg-green-500/5 rounded text-green-500">
+            <Globe className="w-4 h-4" />
           </div>
-          <div className="text-right">
-            Merlin v2.1.4 • Powered by Google AI Studio
+          <div className="text-[10px]">
+            <p className="opacity-50 uppercase">Network</p>
+            <p className="font-bold">RENDER SSL ACTIVE</p>
+          </div>
+        </div>
+        <div className="border border-green-900/20 rounded p-3 bg-black/40 flex items-center gap-3">
+          <div className="p-2 bg-blue-500/5 rounded text-blue-500">
+            <TerminalSquare className="w-4 h-4" />
+          </div>
+          <div className="text-[10px]">
+            <p className="opacity-50 uppercase">Console Bridge</p>
+            <p className="font-bold text-blue-400">ttyd v1.7.3</p>
+          </div>
+        </div>
+        <div className="border border-green-900/20 rounded p-3 bg-black/40 flex items-center gap-3">
+          <div className="p-2 bg-purple-500/5 rounded text-purple-500">
+            <Cpu className="w-4 h-4" />
+          </div>
+          <div className="text-[10px]">
+            <p className="opacity-50 uppercase">Infrastructure</p>
+            <p className="font-bold">MULTI-STAGE DOCKER</p>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
