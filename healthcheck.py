@@ -10,9 +10,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         # Resposta 200 OK essencial para o Render manter o Host vivo
         self.send_response(200)
-        self.send_header('Content-type', 'text/plain')
+        self.send_header('Content-type', 'text/plain; charset=utf-8')
         self.end_headers()
-        self.wfile.write(b"HEALTH_CHECK_OK")
+        self.wfile.write("VERIFICAÇÃO DE SAÚDE OK".encode('utf-8'))
     
     def log_message(self, format, *args):
         return # Silencioso para evitar overhead

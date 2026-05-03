@@ -30,8 +30,8 @@ export default function App() {
           </div>
           <div className="flex gap-2 text-[10px] items-center">
             <div className="flex items-center gap-1 text-green-400 border border-green-500/20 px-2 py-1 bg-green-500/5 rounded">
-              <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-              BUILD: GIT SOURCE
+              <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span>
+              MODO AUTOMÁTICO ATIVO
             </div>
           </div>
         </header>
