@@ -23,15 +23,15 @@ export default function App() {
         <header className="mb-12 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-              <Shield className="w-8 h-8 text-green-500" />
-              Merlin Agent Auto-Deploy
+              <Shield className="w-8 h-8 text-blue-500" />
+              Merlin Web Console
             </h1>
-            <p className="text-gray-400 mt-2">Compilação Nativa • Zero Config • 512MB RAM</p>
+            <p className="text-gray-400 mt-2">Acesso Direto via Navegador • Render Free Tier</p>
           </div>
           <div className="flex gap-2 text-[10px] items-center">
-            <div className="flex items-center gap-1 text-green-400 border border-green-500/20 px-2 py-1 bg-green-500/5 rounded">
-              <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span>
-              MODO AUTOMÁTICO ATIVO
+            <div className="flex items-center gap-1 text-blue-400 border border-blue-500/20 px-2 py-1 bg-blue-500/5 rounded">
+              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-ping"></span>
+              WEB TERMINAL ATIVO
             </div>
           </div>
         </header>
@@ -46,8 +46,8 @@ export default function App() {
           >
             <div className="w-8 h-8 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-lg font-bold">1</div>
             <div>
-              <h3 className="font-semibold text-white">GitHub Sync</h3>
-              <p className="text-xs text-gray-500 mt-1">O Render vai baixar o código do repositório Ne0nd0g/merlin-agent e compilar automaticamente.</p>
+              <h3 className="font-semibold text-white">Acesso Web</h3>
+              <p className="text-xs text-gray-500 mt-1">Ao abrir o link do seu app no Render, o console do Merlin aparecerá automaticamente.</p>
             </div>
           </motion.div>
 
@@ -60,8 +60,8 @@ export default function App() {
           >
             <div className="w-8 h-8 bg-purple-500/10 text-purple-500 flex items-center justify-center rounded-lg font-bold">2</div>
             <div>
-              <h3 className="font-semibold text-white">Variável de URL</h3>
-              <p className="text-xs text-gray-500 mt-1">Adicione a variável <code className="text-purple-400 font-mono">MERLIN_URL</code> no Render com a URL do seu C2.</p>
+              <h3 className="font-semibold text-white">Sem SSH</h3>
+              <p className="text-xs text-gray-500 mt-1">Não é necessário usar terminal local ou comandos complexos.</p>
             </div>
           </motion.div>
 
@@ -74,37 +74,27 @@ export default function App() {
           >
             <div className="w-8 h-8 bg-green-500/10 text-green-500 flex items-center justify-center rounded-lg font-bold">3</div>
             <div>
-              <h3 className="font-semibold text-white">Auto-Run</h3>
-              <p className="text-xs text-gray-500 mt-1">O Agente iniciará sozinho assim que o deploy terminar e o healthcheck responder.</p>
+              <h3 className="font-semibold text-white">Persistência</h3>
+              <p className="text-xs text-gray-500 mt-1">Lembre-se: no plano Free, os dados são apagados se o servidor reiniciar.</p>
             </div>
           </motion.div>
         </div>
 
         {/* Console Interactive */}
-        <div className="bg-[#111111] border border-gray-800 rounded-xl overflow-hidden mb-8">
-          <div className="bg-[#1a1a1a] px-4 py-2 border-b border-gray-800 flex items-center justify-between">
-            <div className="flex gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-500/20"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/20"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-green-500/20"></div>
-            </div>
-            <span className="text-[10px] font-mono text-gray-500 text-center">O navegador mostrará apenas "SAÚDE OK". Use o Shell abaixo:</span>
-          </div>
-          <div className="p-6 space-y-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between text-xs text-gray-500 font-mono text-center">
-                <span>COMANDO PARA RODAR NO SHELL DO RENDER</span>
-                {copied === 'connect' && <span className="text-green-500 text-[10px]">Copiado!</span>}
-              </div>
-              <div 
-                onClick={() => copyToClipboard("./merlin-server", 'connect')}
-                className="bg-black p-4 rounded-lg border border-gray-800 hover:border-green-500/30 cursor-pointer transition-all group relative"
-              >
-                <code className="text-green-400 text-xs font-mono">./merlin-server</code>
-                <Copy className="w-4 h-4 text-gray-600 absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-            </div>
-          </div>
+        <div className="bg-[#111111] border border-gray-800 rounded-xl overflow-hidden mb-8 shadow-2xl shadow-blue-500/5 text-center p-12">
+          <Shield className="w-16 h-16 text-blue-500/20 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-white mb-2">Web Console Habilitado</h2>
+          <p className="text-sm text-gray-400 mb-6 font-mono">
+            O terminal está sendo transmitido via HTTP (ttyd)
+          </p>
+          <a 
+            href="https://merlin-client-w1hb.onrender.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+          >
+            ABRIR MEU CONSOLE <Globe className="w-4 h-4" />
+          </a>
         </div>
 
         {/* Footer Info */}

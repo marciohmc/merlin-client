@@ -12,15 +12,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     python3 \
     procps \
+    curl \
+    ttyd \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-# Copiando o binário compilado
 COPY --from=builder /app/merlin-server .
-COPY healthcheck.py .
 
 # Porta padrão do Render
 ENV PORT=10000
 
-# Execução: Healthcheck + Loop que mantém o contêiner vivo para acesso via Shell
-CMD python3 healthcheck.py & tail -f /dev/null
+# Execução: O ttyd abre o merlin-server diretamente na porta web
+# Isso permite que você acesse o console apenas abrindo o link do Render
+CMD ttyd -p $PORT ./merlin-server
