@@ -5,13 +5,15 @@ import { motion, AnimatePresence } from 'motion/react';
 const BOOT_LOGS = [
   "[SYSTEM] Merlin v2.1.4 Initializing...",
   "[OK] Kernel modules loaded: x86_64",
+  "[INFO] Build detected: Server + CLI Architecture",
   "[OK] Network stack established (0.0.0.0:$PORT)",
-  "[INFO] Compiling Merlin Server from source...",
-  "[INFO] gRPC server preparing on port 50051",
-  "[WARN] Data persistence disabled (RENDER_FREE_TIER)",
+  "[INFO] Starting Merlin C2 gRPC Server (127.0.0.1:50051)",
+  "[INFO] Initializing SQLite database...",
+  "[WARN] Agent listeners on port < 1024 may fail (NON-ROOT)",
   "[OK] ttyd Web Terminal Bridge READY",
   "[SYSTEM] AUTH_KEY: ****************",
   "=========================================",
+  "AGUARDANDO CONEXÃO DO CLI COM O SERVIDOR...",
   "DIGITE 'HELP' PARA VER OS COMANDOS OU 'START' PARA O CONSOLE",
 ];
 
@@ -63,7 +65,12 @@ export default function App() {
           window.open("https://merlin-client-w1hb.onrender.com/", "_blank");
           break;
         case 'status':
-          setLogs(prev => [...prev, "[OK] Servidor: Ativo", "[OK] Porta: Dinâmica", "[OK] SSL: Habilitado"]);
+          setLogs(prev => [...prev, 
+            "[OK] Servidor: Ativo", 
+            "[OK] CLI: Compilado", 
+            "[OK] gRPC: 127.0.0.1:50051",
+            "[OK] Web Port: " + (process.env.VITE_PORT || "Dinâmica")
+          ]);
           break;
         case 'clear':
           setLogs([]);
