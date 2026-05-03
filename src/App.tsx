@@ -3,7 +3,7 @@ import { Shield, Terminal, TerminalSquare, ChevronRight, Globe, AlertCircle, Che
 import { motion, AnimatePresence } from 'motion/react';
 
 const BOOT_LOGS = [
-  "[SYSTEM] Merlin v2.1.4 Initializing...",
+  "[SYSTEM] Merlin v1.1.5 Initializing...",
   "[OK] Kernel modules loaded: x86_64",
   "[INFO] Build detected: Server + CLI Architecture",
   "[OK] Network stack established (0.0.0.0:$PORT)",
@@ -53,33 +53,41 @@ export default function App() {
       switch (cmd) {
         case 'help':
           setLogs(prev => [...prev, 
-            "COMANDOS DISPONÍVEIS:",
-            " - start: Abre o console interativo do Merlin",
-            " - status: Verifica o estado do servidor C2",
-            " - clear: Limpa os logs da tela",
-            " - about: Informações sobre o projeto"
+            "COMANDOS MERLIN C2 (v1.1.5):",
+            " - version: Exibe a versão do servidor e testa conexão",
+            " - listeners: Abre o menu de gerenciamento de escutas",
+            " - sessions: Lista agentes/sessões estabelecidas",
+            " - modules: Acessa a biblioteca de módulos pós-atividades",
+            " - interact [ID]: Interage com um agente ou listener específico",
+            " - queue [ID]: Enfileira comandos para agentes",
+            " - ! [cmd]: Executa comandos no sistema local do servidor",
+            "----------------",
+            "COMANDOS DO PORTAL WEB:",
+            " - start: Abre o terminal ttyd interativo",
+            " - status: Verifica integridade gRPC/Web",
+            " - clear: Limpa esta tela de logs"
           ]);
           break;
         case 'start':
-          setLogs(prev => [...prev, "[!] Redirecionando para o Console Web..."]);
+          setLogs(prev => [...prev, "[!] Conectando ao túnel ttyd (Bridge)...", "[OK] Redirecionando..."]);
           window.open("https://merlin-client-w1hb.onrender.com/", "_blank");
           break;
         case 'status':
           setLogs(prev => [...prev, 
-            "[OK] Servidor: Ativo", 
-            "[OK] CLI: Compilado", 
-            "[OK] gRPC: 127.0.0.1:50051",
-            "[OK] Web Port: " + (process.env.VITE_PORT || "Dinâmica")
+            "[OK] Merlin Server: RUNNING", 
+            "[OK] gRPC Link: 127.0.0.1:50051", 
+            "[OK] Database: merlin.db (SQLite3)",
+            "[INFO] CLI Bridge: Ready"
           ]);
           break;
         case 'clear':
           setLogs([]);
           break;
         case 'about':
-          setLogs(prev => [...prev, "Merlin Web Console v2.1.4", "Powered by Google AI Studio & Render.com"]);
+          setLogs(prev => [...prev, "Merlin Web Console v1.1.5", "Portal de Acesso via Google AI Studio"]);
           break;
         default:
-          setLogs(prev => [...prev, `[ERR] Comando não reconhecido: ${cmd}`]);
+          setLogs(prev => [...prev, `[ERR] Merlin: comando '${cmd}' não encontrado neste portal. Digite 'help'.`]);
       }
     }, 200);
   };
