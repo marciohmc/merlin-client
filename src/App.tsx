@@ -14,6 +14,7 @@ export default function App() {
   const commands = {
     connect: "./merlin-client -url https://seu-servidor-c2.onrender.com",
     permissions: "chmod +x merlin-client",
+    check: "ps aux | grep python",
   };
 
   return (
@@ -24,79 +25,98 @@ export default function App() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
               <Shield className="w-8 h-8 text-blue-500" />
-              Merlin C2 Deployer
+              Merlin C2 Auto-Deploy
             </h1>
-            <p className="text-gray-400 mt-2">Configurado para Render.com (Planos de 512MB RAM)</p>
+            <p className="text-gray-400 mt-2">Deploy Automatizado • Free Tier • 512MB RAM</p>
           </div>
-          <div className="flex gap-2">
-            <span className="px-3 py-1 bg-green-500/10 text-green-400 text-xs font-medium rounded-full border border-green-500/20">
-              Pronto para Deploy
-            </span>
+          <div className="flex gap-2 text-[10px] items-center">
+            <div className="flex items-center gap-1 text-blue-400 border border-blue-500/20 px-2 py-1 bg-blue-500/5 rounded">
+              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-ping"></span>
+              AUTO-MODE ACTIVE
+            </div>
           </div>
         </header>
 
-        {/* Status & Instructions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Step 1 */}
           <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-[#111111] border border-gray-800 p-6 rounded-xl"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-[#111111] border border-gray-800 p-5 rounded-xl flex flex-col gap-3"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <Globe className="w-5 h-5 text-blue-400" />
-              <h2 className="text-lg font-semibold text-white">Próximos Passos</h2>
+            <div className="w-8 h-8 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-lg font-bold">1</div>
+            <div>
+              <h3 className="font-semibold text-white">Repositório</h3>
+              <p className="text-xs text-gray-500 mt-1">Conecte seu GitHub ao Render usando o repositório atual.</p>
             </div>
-            <ul className="space-y-3 text-sm text-gray-400">
-              <li className="flex gap-2">
-                <span className="text-blue-500 font-bold">1.</span>
-                Suba estes arquivos para o seu GitHub/GitLab.
-              </li>
-              <li className="flex gap-2">
-                <span className="text-blue-500 font-bold">2.</span>
-                No Render, crie um "Web Service" apontando para o repositório.
-              </li>
-              <li className="flex gap-2">
-                <span className="text-blue-500 font-bold">3.</span>
-                Aguarde o status <span className="text-green-400">"Live"</span>.
-              </li>
-            </ul>
           </motion.div>
 
+          {/* Step 2 */}
           <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
-            className="bg-[#111111] border border-gray-800 p-6 rounded-xl"
+            className="bg-[#111111] border border-gray-800 p-5 rounded-xl flex flex-col gap-3"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <Terminal className="w-5 h-5 text-purple-400" />
-              <h2 className="text-lg font-semibold text-white">Render Shell</h2>
+            <div className="w-8 h-8 bg-purple-500/10 text-purple-500 flex items-center justify-center rounded-lg font-bold">2</div>
+            <div>
+              <h3 className="font-semibold text-white">Configuração</h3>
+              <p className="text-xs text-gray-500 mt-1">Selecione "Docker" como runtime e plano "Free" (Ohio recomendado).</p>
             </div>
-            <p className="text-sm text-gray-400 mb-4">
-              Use a aba "Shell" no painel do Render para interagir com o cliente:
-            </p>
-            <div className="space-y-4">
-              <div className="relative group">
-                <div className="text-[10px] uppercase text-gray-500 mb-1 font-mono">Comando de Conexão</div>
-                <div className="bg-black p-3 rounded-lg border border-gray-800 font-mono text-xs flex justify-between items-center group-hover:border-blue-500/50 transition-colors">
-                  <code className="text-blue-400 truncate pr-8">{commands.connect}</code>
-                  <button 
-                    onClick={() => copyToClipboard(commands.connect, 'connect')}
-                    className="absolute right-2 p-1 hover:bg-gray-800 rounded transition-colors"
-                  >
-                    {copied === 'connect' ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-gray-500" />}
-                  </button>
-                </div>
-              </div>
+          </motion.div>
+
+          {/* Step 3 */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="bg-[#111111] border border-gray-800 p-5 rounded-xl flex flex-col gap-3"
+          >
+            <div className="w-8 h-8 bg-green-500/10 text-green-500 flex items-center justify-center rounded-lg font-bold">3</div>
+            <div>
+              <h3 className="font-semibold text-white">Deploy</h3>
+              <p className="text-xs text-gray-500 mt-1">Aguarde o status "Live" e use a aba "Shell" para comandar.</p>
             </div>
           </motion.div>
         </div>
 
-        {/* Important Notes */}
-        <div className="bg-blue-500/5 border border-blue-500/20 p-4 rounded-lg text-sm text-blue-200">
-          <strong>Aviso:</strong> O sistema de arquivos do Render é efêmero. 
-          As chaves do servidor e o histórico serão perdidos se o container for reiniciado. 
-          Use para laboratórios rápidos ou ambientes controlados.
+        {/* Console Interactive */}
+        <div className="bg-[#111111] border border-gray-800 rounded-xl overflow-hidden mb-8">
+          <div className="bg-[#1a1a1a] px-4 py-2 border-b border-gray-800 flex items-center justify-between">
+            <div className="flex gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/20"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/20"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500/20"></div>
+            </div>
+            <span className="text-[10px] font-mono text-gray-500">Render Shell Console</span>
+          </div>
+          <div className="p-6 space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between text-xs text-gray-500 font-mono">
+                <span>CONECTAR AO C2</span>
+                {copied === 'connect' && <span className="text-green-500 text-[10px]">Copiado!</span>}
+              </div>
+              <div 
+                onClick={() => copyToClipboard(commands.connect, 'connect')}
+                className="bg-black p-4 rounded-lg border border-gray-800 hover:border-blue-500/30 cursor-pointer transition-all group relative"
+              >
+                <code className="text-blue-400 text-xs font-mono">{commands.connect}</code>
+                <Copy className="w-4 h-4 text-gray-600 absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Info */}
+        <div className="flex flex-col md:flex-row gap-4 items-center justify-between text-[11px] text-gray-500">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1"><Check className="w-3 h-3 text-blue-500" /> Dockerfile Automatizado</span>
+            <span className="flex items-center gap-1"><Check className="w-3 h-3 text-blue-500" /> Healthcheck.py Incluso</span>
+          </div>
+          <div className="text-right">
+            v2.1.4 Stable • Powered by Google AI Studio
+          </div>
         </div>
       </div>
     </div>
