@@ -16,14 +16,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Define o diretório de trabalho
 WORKDIR /opt/merlin
 
-# Download do Merlin Client v2.1.4
-RUN curl -L https://github.com/Ne0nd0g/merlin/releases/download/v2.1.4/merlin-client-linux-amd64.7z -o merlin.7z
+# Download do Merlin Server v2.1.4 (que contém o CLI para gerenciar o C2)
+RUN curl -L https://github.com/Ne0nd0g/merlin/releases/download/v2.1.4/merlin-server-linux-amd64.7z -o merlin.7z
 
-# Extração usando a senha "merlin" e remoção do arquivo compactado
-RUN 7z x merlin.7z -pmerlin && rm merlin.7z
+# Extração usando a senha "merlin", com flag -y e remoção do arquivo compactado
+RUN 7z x merlin.7z -pmerlin -y && rm merlin.7z
 
 # Renomeia o binário para simplificar e dá permissão de execução
-RUN mv merlin-client-linux-amd64 merlin-client && chmod +x merlin-client
+RUN mv merlin-server-linux-amd64 merlin-server && chmod +x merlin-server
 
 # Copia o script de health check
 COPY healthcheck.py .
