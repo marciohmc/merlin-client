@@ -101,10 +101,10 @@ export default function App() {
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between text-[11px] text-gray-500">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1"><Check className="w-3 h-3 text-blue-500" /> Dockerfile Automatizado</span>
-            <span className="flex items-center gap-1"><Check className="w-3 h-3 text-blue-500" /> Healthcheck.py Incluso</span>
+            <span className="flex items-center gap-1"><Check className="w-3 h-3 text-blue-500" /> Web Console (ttyd)</span>
           </div>
           <div className="text-right">
-            v2.1.4 Stable • Powered by Google AI Studio
+            Merlin v2.1.4 • Powered by Google AI Studio
           </div>
         </div>
       </div>

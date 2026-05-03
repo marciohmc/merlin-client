@@ -1,11 +1,11 @@
-# Merlin Agent - Deploy Automático no Render
+# Merlin Server - Web Console no Render
 
-Este projeto foi configurado para compilar e rodar o Merlin Agent automaticamente no Render.com, eliminando erros de extração de arquivos 7z e senhas.
+Este projeto foi configurado para rodar o **Merlin Server** juntamente com o **ttyd**, permitindo que você acesse o console de comando diretamente pelo seu navegador, sem necessidade de SSH ou terminal local.
 
 ## 1. Como Funciona
 O `Dockerfile` utiliza uma estratégia **multi-stage build**:
-1.  **Estágio de Build:** Baixa o código fonte oficial do `merlin-agent` (Go) e compila o binário nativamente para Linux.
-2.  **Estágio de Runtime:** Cria uma imagem Debian mínima, copia apenas o binário compilado e inicia um servidor Python para o Health Check do Render.
+1.  **Build:** Baixa o código fonte oficial do `merlin` (Go) e compila o binário nativamente.
+2.  **Runtime:** Instala o `ttyd` (um terminal simples via web) e o configura para rodar o `./merlin-server` na porta padrão do Render (`$PORT`).
 
 ## 2. Passo a Passo do Deploy
 1.  Conecte este repositório ao seu **Render.com**.
@@ -13,16 +13,11 @@ O `Dockerfile` utiliza uma estratégia **multi-stage build**:
 3.  Configurações:
     *   **Runtime:** Docker
     *   **Instance Type:** Free (512MB RAM)
-4.  **Variáveis de Ambiente (Opcional mas Recomendado):**
-    *   `MERLIN_URL`: A URL do seu servidor Merlin C2 (ex: `https://meu-c2.onrender.com`). Se não definida, o agente tentará o valor padrão configurado no Dockerfile.
-5.  Aguarde o status **"Live"**.
+4.  Aguarde o status **"Live"**.
 
-## 3. Interação Manual
-Embora o agente rode automaticamente, você pode interagir com o container via aba **"Shell"** no Render:
-*   Para ver se o agente está rodando: `ps aux | grep merlin`
-*   Para ver os logs do agente (se estiver em foreground): Verifique a aba **"Logs"** do Render.
+## 3. Como Acessar
+Após o deploy, basta clicar no link fornecido pelo Render (ex: `https://meu-projeto.onrender.com`). 
+O terminal do Merlin Server aparecerá diretamente na página.
 
-## 4. Vantagens
-*   **Segurança:** Sem downloads de binários pré-compilados de fontes desconhecidas (compila direto do GitHub oficial).
-*   **Estabilidade:** O script `healthcheck.py` garante que o Render não reinicie o container por falta de resposta na porta `$PORT`.
-*   **Eficiência:** Consumo de RAM otimizado para os limites do plano gratuito.
+## 4. Importante (Persistência)
+O plano **Free** do Render possui sistema de arquivos efêmero. Se o servidor for reiniciado ou entrar em repouso por inatividade, os bancos de dados do Merlin e as chaves geradas serão reiniciados. Para uso profissional ou persistente, considere um plano pago com "Persistent Disk".

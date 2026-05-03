@@ -10,11 +10,13 @@ RUN go build -ldflags="-s -w" -o merlin-server main.go
 FROM debian:12-slim
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
-    python3 \
-    procps \
     curl \
-    ttyd \
+    procps \
     && rm -rf /var/lib/apt/lists/*
+
+# Baixando o binário do ttyd (Terminal via Web) para evitar erro no apt-get
+RUN curl -fSL https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.x86_64 -o /usr/local/bin/ttyd && \
+    chmod +x /usr/local/bin/ttyd
 
 WORKDIR /app
 COPY --from=builder /app/merlin-server .
