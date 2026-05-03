@@ -102,7 +102,7 @@ export default function App() {
                 key={i}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                className={log.startsWith('>') ? "text-blue-400 mt-4 mb-2" : log.startsWith('[ERR]') ? "text-red-500" : ""}
+                className={log?.startsWith('>') ? "text-blue-400 mt-4 mb-2" : log?.startsWith('[ERR]') ? "text-red-500" : ""}
               >
                 {log}
               </motion.div>
