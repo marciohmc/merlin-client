@@ -12,9 +12,8 @@ export default function App() {
   };
 
   const commands = {
-    connect: "./merlin-client -url https://seu-servidor-c2.onrender.com",
-    permissions: "chmod +x merlin-client",
-    check: "ps aux | grep python",
+    connect: "./merlin-agent -url https://seu-servidor-c2.onrender.com",
+    envVar: "MERLIN_URL",
   };
 
   return (
@@ -24,15 +23,15 @@ export default function App() {
         <header className="mb-12 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-              <Shield className="w-8 h-8 text-blue-500" />
-              Merlin C2 Auto-Deploy
+              <Shield className="w-8 h-8 text-green-500" />
+              Merlin Agent Auto-Deploy
             </h1>
-            <p className="text-gray-400 mt-2">Deploy Automatizado • Free Tier • 512MB RAM</p>
+            <p className="text-gray-400 mt-2">Compilação Nativa • Zero Config • 512MB RAM</p>
           </div>
           <div className="flex gap-2 text-[10px] items-center">
-            <div className="flex items-center gap-1 text-blue-400 border border-blue-500/20 px-2 py-1 bg-blue-500/5 rounded">
-              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-ping"></span>
-              AUTO-MODE ACTIVE
+            <div className="flex items-center gap-1 text-green-400 border border-green-500/20 px-2 py-1 bg-green-500/5 rounded">
+              <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+              BUILD: GIT SOURCE
             </div>
           </div>
         </header>
@@ -47,8 +46,8 @@ export default function App() {
           >
             <div className="w-8 h-8 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-lg font-bold">1</div>
             <div>
-              <h3 className="font-semibold text-white">Repositório</h3>
-              <p className="text-xs text-gray-500 mt-1">Conecte seu GitHub ao Render usando o repositório atual.</p>
+              <h3 className="font-semibold text-white">GitHub Sync</h3>
+              <p className="text-xs text-gray-500 mt-1">O Render vai baixar o código do repositório Ne0nd0g/merlin-agent e compilar automaticamente.</p>
             </div>
           </motion.div>
 
@@ -61,8 +60,8 @@ export default function App() {
           >
             <div className="w-8 h-8 bg-purple-500/10 text-purple-500 flex items-center justify-center rounded-lg font-bold">2</div>
             <div>
-              <h3 className="font-semibold text-white">Configuração</h3>
-              <p className="text-xs text-gray-500 mt-1">Selecione "Docker" como runtime e plano "Free" (Ohio recomendado).</p>
+              <h3 className="font-semibold text-white">Variável de URL</h3>
+              <p className="text-xs text-gray-500 mt-1">Adicione a variável <code className="text-purple-400 font-mono">MERLIN_URL</code> no Render com a URL do seu C2.</p>
             </div>
           </motion.div>
 
@@ -75,8 +74,8 @@ export default function App() {
           >
             <div className="w-8 h-8 bg-green-500/10 text-green-500 flex items-center justify-center rounded-lg font-bold">3</div>
             <div>
-              <h3 className="font-semibold text-white">Deploy</h3>
-              <p className="text-xs text-gray-500 mt-1">Aguarde o status "Live" e use a aba "Shell" para comandar.</p>
+              <h3 className="font-semibold text-white">Auto-Run</h3>
+              <p className="text-xs text-gray-500 mt-1">O Agente iniciará sozinho assim que o deploy terminar e o healthcheck responder.</p>
             </div>
           </motion.div>
         </div>
@@ -89,19 +88,19 @@ export default function App() {
               <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/20"></div>
               <div className="w-2.5 h-2.5 rounded-full bg-green-500/20"></div>
             </div>
-            <span className="text-[10px] font-mono text-gray-500">Render Shell Console</span>
+            <span className="text-[10px] font-mono text-gray-500">Manual Interation (Optional)</span>
           </div>
           <div className="p-6 space-y-6">
             <div className="space-y-4">
               <div className="flex items-center justify-between text-xs text-gray-500 font-mono">
-                <span>CONECTAR AO C2</span>
+                <span>COMANDO DO AGENTE</span>
                 {copied === 'connect' && <span className="text-green-500 text-[10px]">Copiado!</span>}
               </div>
               <div 
                 onClick={() => copyToClipboard(commands.connect, 'connect')}
-                className="bg-black p-4 rounded-lg border border-gray-800 hover:border-blue-500/30 cursor-pointer transition-all group relative"
+                className="bg-black p-4 rounded-lg border border-gray-800 hover:border-green-500/30 cursor-pointer transition-all group relative"
               >
-                <code className="text-blue-400 text-xs font-mono">{commands.connect}</code>
+                <code className="text-green-400 text-xs font-mono">{commands.connect}</code>
                 <Copy className="w-4 h-4 text-gray-600 absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>

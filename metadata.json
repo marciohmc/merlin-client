@@ -1,6 +1,6 @@
 {
-  "name": "Merlin C2 Client Deployer",
-  "description": "Configuração para rodar o Merlin Client no Render.com com persistência via sleep infinity.",
+  "name": "Merlin Agent Deployer",
+  "description": "Deploy automático do Merlin Agent no Render com compilação via Docker multi-stage.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
