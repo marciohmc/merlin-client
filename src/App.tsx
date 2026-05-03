@@ -88,19 +88,19 @@ export default function App() {
               <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/20"></div>
               <div className="w-2.5 h-2.5 rounded-full bg-green-500/20"></div>
             </div>
-            <span className="text-[10px] font-mono text-gray-500">Manual Interation (Optional)</span>
+            <span className="text-[10px] font-mono text-gray-500 text-center">O navegador mostrará apenas "SAÚDE OK". Use o Shell abaixo:</span>
           </div>
           <div className="p-6 space-y-6">
             <div className="space-y-4">
-              <div className="flex items-center justify-between text-xs text-gray-500 font-mono">
-                <span>COMANDO DO AGENTE</span>
+              <div className="flex items-center justify-between text-xs text-gray-500 font-mono text-center">
+                <span>COMANDO PARA RODAR NO SHELL DO RENDER</span>
                 {copied === 'connect' && <span className="text-green-500 text-[10px]">Copiado!</span>}
               </div>
               <div 
-                onClick={() => copyToClipboard(commands.connect, 'connect')}
+                onClick={() => copyToClipboard("./merlin-server", 'connect')}
                 className="bg-black p-4 rounded-lg border border-gray-800 hover:border-green-500/30 cursor-pointer transition-all group relative"
               >
-                <code className="text-green-400 text-xs font-mono">{commands.connect}</code>
+                <code className="text-green-400 text-xs font-mono">./merlin-server</code>
                 <Copy className="w-4 h-4 text-gray-600 absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>
